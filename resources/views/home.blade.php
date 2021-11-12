@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    <create-component></create-component>
                 </div>
             </div>
         </div>
