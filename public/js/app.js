@@ -1972,6 +1972,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   // binding a model
   //data initialization present on the this component
@@ -1980,7 +2024,11 @@ __webpack_require__.r(__webpack_exports__);
       students: {},
       name: '',
       email: '',
-      phone: ''
+      phone: '',
+      editname: '',
+      editemail: '',
+      editphone: '',
+      editid: ''
     };
   },
   mounted: function mounted() {
@@ -2003,6 +2051,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.name = '';
         _this.email = '';
         _this.phone = '';
+
+        _this.getResults();
       });
     },
     // pagination method
@@ -2012,6 +2062,39 @@ __webpack_require__.r(__webpack_exports__);
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       axios.get('all_students?page=' + page).then(function (response) {
         _this2.students = response.data;
+      });
+    },
+    editStudent: function editStudent(student_id) {
+      var _this3 = this;
+
+      // alert(student_id);
+      // alert("Saave student test");
+      axios.get("edit_student/" + student_id).then(function (response) {
+        console.log(response);
+        _this3.editname = response.data.name;
+        _this3.editemail = response.data.email;
+        _this3.editphone = response.data.phone;
+        _this3.editid = response.data.id;
+      });
+    },
+    updateStudent: function updateStudent(student_id) {
+      var _this4 = this;
+
+      axios.put("updateStudent/" + student_id, {
+        name: this.editname,
+        email: this.editemail,
+        phone: this.editphone
+      }).then(function (response) {
+        // alert("data updated");
+        _this4.getResults(); // $('#EditeModal').hide();
+
+      });
+    },
+    deleteStudent: function deleteStudent(student_id) {
+      var _this5 = this;
+
+      axios["delete"]("deleteStudent/" + student_id).then(function (response) {
+        _this5.getResults();
       });
     }
   },
@@ -38378,7 +38461,47 @@ var render = function () {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(student.phone))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v("Edit | Delete")]),
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-primary",
+                            attrs: {
+                              type: "button",
+                              "data-toggle": "modal",
+                              "data-target": "#EditeModal",
+                            },
+                            on: {
+                              click: function ($event) {
+                                return _vm.editStudent(student.id)
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\n                                        Edit\n                                    "
+                            ),
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-danger",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function ($event) {
+                                return _vm.deleteStudent(student.id)
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\n                                        Delete\n                                    "
+                            ),
+                          ]
+                        ),
+                      ]),
                     ])
                   }),
                   0
@@ -38395,6 +38518,141 @@ var render = function () {
         ]),
       ]),
     ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "EditeModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true",
+        },
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("form", [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editname,
+                          expression: "editname",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", id: "name", placeholder: "name" },
+                      domProps: { value: _vm.editname },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.editname = $event.target.value
+                        },
+                      },
+                    }),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "exampleInputEmail1" } }, [
+                      _vm._v("Email address"),
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editemail,
+                          expression: "editemail",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "email",
+                        id: "exampleInputEmail1",
+                        "aria-describedby": "emailHelp",
+                        placeholder: "Enter email",
+                      },
+                      domProps: { value: _vm.editemail },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.editemail = $event.target.value
+                        },
+                      },
+                    }),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "name" } }, [_vm._v("Phone")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editphone,
+                          expression: "editphone",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "number",
+                        id: "phone",
+                        placeholder: "Enter phone",
+                      },
+                      domProps: { value: _vm.editphone },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.editphone = $event.target.value
+                        },
+                      },
+                    }),
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "submit", "data-dismiss": "modal" },
+                      on: {
+                        click: function ($event) {
+                          $event.preventDefault()
+                          return _vm.updateStudent(_vm.editid)
+                        },
+                      },
+                    },
+                    [_vm._v("Update")]
+                  ),
+                ]),
+              ]),
+              _vm._v(" "),
+              _vm._m(2),
+            ]),
+          ]
+        ),
+      ]
+    ),
   ])
 }
 var staticRenderFns = [
@@ -38414,6 +38672,46 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Action")]),
       ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Modal title")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close",
+          },
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      ),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger",
+          attrs: { type: "button", "data-dismiss": "modal" },
+        },
+        [_vm._v("Close")]
+      ),
     ])
   },
 ]

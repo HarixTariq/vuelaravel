@@ -48,13 +48,57 @@
                                     <td>{{student.name}}</td>
                                     <td>{{student.email}}</td>
                                     <td>{{student.phone}}</td>
-                                    <td>Edit | Delete</td>
+                                    <td>
+                                        <button type="button" @click="editStudent(student.id)" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#EditeModal">
+                                            Edit
+                                        </button>
+                                        <button type="button" @click="deleteStudent(student.id)" class="btn btn-sm btn-danger" >
+                                            Delete
+                                        </button>
+
+                                    </td>
                                 </tr>
 
                             </tbody>
                         </table>
                         <pagination :data="students" @pagination-change-page="getResults"></pagination>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="EditeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" v-model="editname" class="form-control" id="name" placeholder="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input type="email" v-model="editemail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                            </div>
+                              <div class="form-group">
+                                  <label for="name">Phone</label>
+                                  <input type="number" v-model="editphone" class="form-control" id="phone" placeholder="Enter phone">
+                              </div>
+
+                          <button type="submit" @click.prevent="updateStudent(editid)" data-dismiss="modal" class="btn btn-success">Update</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                     </div>
                 </div>
             </div>
@@ -71,7 +115,11 @@
                 students : {},
                 name : '',
                 email : '',
-                phone : ''
+                phone : '',
+                editname : '',
+                editemail : '',
+                editphone : '',
+                editid:''
             }
         },
 
@@ -94,6 +142,7 @@
                     this.name = '';
                     this.email = '';
                     this.phone = '';
+                    this.getResults();
                 });
             },
             // pagination method
@@ -102,7 +151,38 @@
 				.then(response => {
 					this.students = response.data;
 				});
-		}
+		},
+        editStudent(student_id){
+                // alert(student_id);
+                // alert("Saave student test");
+                axios.get("edit_student/"+student_id)
+                .then(response => {
+                    console.log(response);
+                    this.editname = response.data.name;
+                    this.editemail = response.data.email;
+                    this.editphone = response.data.phone;
+                    this.editid = response.data.id;
+
+                });
+            },
+        updateStudent(student_id){
+            axios.put("updateStudent/"+student_id,{
+                name : this.editname,
+                email : this.editemail,
+                phone : this.editphone
+            }).then(response => {
+                // alert("data updated");
+                this.getResults();
+                // $('#EditeModal').hide();
+            });
+        },
+        deleteStudent(student_id){
+            axios.delete("deleteStudent/"+student_id)
+            .then(response => {
+                this.getResults();
+
+            });
+        }
         },
         created(){
             // runs at first positon
